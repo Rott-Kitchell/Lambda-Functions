@@ -1,0 +1,19 @@
+{
+  "name": "bcmondayv2",
+  "description": "new orders and status updates from BigCommerce are sent to Monday",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless": "^3.33.0",
+    "serverless-layers": "^2.6.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
