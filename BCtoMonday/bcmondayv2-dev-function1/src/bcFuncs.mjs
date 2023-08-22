@@ -27,7 +27,9 @@ export async function getOrderInfo(orderId) {
       result.forEach((r) => {
         if (r.status && r.status === 404)
           throw new Error("Order not found in BC!!");
+        if (r === "missing info") throw r;
       });
+
       let main = result.find((x) => !Array.isArray(x)),
         shipping_addresses = result.find(
           (x) => Array.isArray(x) && x[0].street_1
@@ -40,7 +42,8 @@ export async function getOrderInfo(orderId) {
       };
     })
     .catch((err) => {
-      console.log("error getting full order info", err);
+      console.error("error getting full order info", err);
+      if (err === "missing info") return err;
       throw err;
     });
 }

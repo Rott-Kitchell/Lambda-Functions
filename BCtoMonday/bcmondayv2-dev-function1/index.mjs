@@ -22,5 +22,6 @@ export async function lambdaHandler(event) {
 const orderUpdated = async ({ data }) => {
   let orderId = data.id;
   const fullOrder = await getOrderInfo(orderId);
+  if (fullOrder === "missing info") return { statusCode: 200, body: fullOrder };
   return BCToMondayProcessor(fullOrder);
 };

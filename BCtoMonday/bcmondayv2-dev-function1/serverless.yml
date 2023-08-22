@@ -1,0 +1,28 @@
+org: rkitch815
+app: bcmondayv2
+service: bcmondayv2
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  region: us-east-2
+  runtime: nodejs18.x
+
+plugins:
+  - serverless-layers
+
+custom:
+  serverless-layers:
+    - bcmondayv2-node-modules:
+        dependenciesPath: ./package.json
+        layersDeploymentBucket: bcmondayv2-bucket
+    - AWS-Parameters-and-Secrets-Lambda-Extension:
+        arn: arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension:4
+        layersDeploymentBucket: bcmondayv2-bucket
+
+functions:
+  function1:
+    handler: index.handler
+    url:
+      cors: true
+    timeout: 15

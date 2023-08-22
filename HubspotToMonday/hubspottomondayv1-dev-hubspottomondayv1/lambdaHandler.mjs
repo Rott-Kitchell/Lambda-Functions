@@ -29,27 +29,24 @@ export async function lambdaHandler(event) {
     onboarding_manager,
     account_executive,
   };
-  console.log(
-    "🚀 ~ file: lambdaHandler.mjs:18 ~ lambdaHandler ~ therest:",
-    therest
-  );
-  console.log(
-    "🚀 ~ file: lambdaHandler.mjs:24 ~ lambdaHandler ~ operation_type, service_model,: ",
-    operation_type,
-    service_model
-  );
+
   for (let person in team) {
     if (team[person] !== null) {
-      let personData = await hubspotClient.crm.owners.ownersApi.getById(
-        team[person]
-      );
-      team[person] = personData.email;
+      try {
+        let personData = await hubspotClient.crm.owners.ownersApi.getById(
+          team[person]
+        );
+        team[person] = personData.email;
+      } catch (err) {
+        console.log(err);
+        team[person] = null;
+      }
     }
   }
   console.log("🚀 ~ file: lambdaHandler.mjs:25 ~ lambdaHandler ~ team:", team);
   console.log(
     "🚀 ~ file: lambdaHandler.mjs:59 ~ lambdaHandler ~ service_model.split(';'):",
-    service_model.split(";")
+    service_model ? service_model.split(";") : null
   );
   let priority = priortityCalculator(therest);
 
@@ -62,7 +59,7 @@ export async function lambdaHandler(event) {
       onboarding_manager: team.onboarding_manager,
       account_executive: team.account_executive,
       service_model: {
-        labels: service_model.split(";"),
+        labels: service_model ? service_model.split(";") : null,
       },
       operation_type: {
         labels: operation_type,
