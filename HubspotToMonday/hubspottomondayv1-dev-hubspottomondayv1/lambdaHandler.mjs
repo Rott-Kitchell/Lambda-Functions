@@ -36,7 +36,16 @@ export async function lambdaHandler(event) {
         let personData = await hubspotClient.crm.owners.ownersApi.getById(
           team[person]
         );
-        team[person] = personData.email;
+        team[person] =
+          personData.email === "ashley.frausto@gotab.io"
+            ? "ashley@gotab.io"
+            : personData.email;
+        console.log(
+          "🚀 ~ file: lambdaHandler.mjs:40 ~ lambdaHandler ~ team[person]:",
+          team[person],
+          typeof team[person],
+          team[person] instanceof String
+        );
       } catch (err) {
         console.log(err);
         team[person] = null;
@@ -49,6 +58,12 @@ export async function lambdaHandler(event) {
     service_model ? service_model.split(";") : null
   );
   let priority = priortityCalculator(therest);
+  let dateClosed = new Date(closedate).toJSON(),
+    dateClosedTime = dateClosed.substring(
+      dateClosed.indexOf("T") + 1,
+      dateClosed.indexOf(".")
+    ),
+    dateClosedDate = dateClosed.substring(0, dateClosed.indexOf("T"));
 
   let resMessage = await sendToMonday(query, {
     boardId: parseInt(MONDAYNETNEWBOARDID),
@@ -62,13 +77,14 @@ export async function lambdaHandler(event) {
         labels: service_model ? service_model.split(";") : null,
       },
       operation_type: {
-        labels: operation_type,
+        labels: operation_type ? operation_type.split(";") : null,
       },
       priority: {
         label: priority,
       },
       sotd,
       state,
+      closedate: { date: dateClosedDate, time: dateClosedTime },
     }),
   });
 

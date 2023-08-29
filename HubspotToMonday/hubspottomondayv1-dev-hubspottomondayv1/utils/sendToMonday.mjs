@@ -17,7 +17,10 @@ export default async function sendToMonday(query, vars) {
   let response = await fetchJson(url, options, {});
   console.log(
     "🚀 ~ file: sendToMonday.mjs:19 ~ sendToMonday ~ response:",
-    response
+    response,
+    response.status_code === 500
+      ? JSON.stringify({ query: query, variables: vars })
+      : ""
   );
   return response;
 }
