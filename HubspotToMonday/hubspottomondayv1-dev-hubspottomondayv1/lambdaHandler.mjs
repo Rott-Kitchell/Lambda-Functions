@@ -58,8 +58,12 @@ export async function lambdaHandler(event) {
     service_model ? service_model.split(";") : null
   );
   let priority = priortityCalculator(therest);
-  let dateClosed = new Date(closedate).toJSON(),
-    dateClosedTime = dateClosed.substring(
+  let dateClosed = new Date(closedate).toJSON();
+  console.log(
+    "🚀 ~ file: lambdaHandler.mjs:62 ~ lambdaHandler ~ dateClosed:",
+    dateClosed
+  );
+  let dateClosedTime = dateClosed.substring(
       dateClosed.indexOf("T") + 1,
       dateClosed.indexOf(".")
     ),
