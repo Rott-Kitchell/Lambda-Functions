@@ -20,6 +20,7 @@ export async function lambdaHandler(event) {
     state,
     operation_type,
     service_model,
+    record_id,
     ...therest
   } = JSON.parse(event.body);
 
@@ -58,10 +59,14 @@ export async function lambdaHandler(event) {
     service_model ? service_model.split(";") : null
   );
   let priority = priortityCalculator(therest);
-  let dateClosed = new Date(closedate).toJSON();
+  let dateClosed = new Date(parseInt(closedate)).toJSON();
   console.log(
-    "🚀 ~ file: lambdaHandler.mjs:62 ~ lambdaHandler ~ dateClosed:",
-    dateClosed
+    "🚀 ~ file: lambdaHandler.mjs:62 ~ lambdaHandler ~ closedate: " +
+      closedate +
+      " ~ dateClosed: " +
+      new Date(closedate) +
+      " dateClosed.toJSON: " +
+      dateClosed
   );
   let dateClosedTime = dateClosed.substring(
       dateClosed.indexOf("T") + 1,
@@ -89,6 +94,7 @@ export async function lambdaHandler(event) {
       sotd,
       state,
       closedate: { date: dateClosedDate, time: dateClosedTime },
+      record_uid: record_id,
     }),
   });
 
