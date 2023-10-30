@@ -31,6 +31,8 @@ export async function lambdaHandler(event) {
     account_executive,
   };
 
+  //let associations = await hubspotClient.crm.associations.v4.associatedId()
+
   for (let person in team) {
     if (team[person] !== null) {
       try {
@@ -94,7 +96,8 @@ export async function lambdaHandler(event) {
       sotd,
       state,
       closedate: { date: dateClosedDate, time: dateClosedTime },
-      record_uid: record_id,
+      record_id3: record_id,
+      link: `https://app.hubspot.com/contacts/7820027/record/0-3/${record_id}`,
     }),
   });
 
