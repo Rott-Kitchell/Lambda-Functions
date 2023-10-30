@@ -16,8 +16,6 @@ export async function FromBCToMonday(
 ) {
   let message = "";
   let address = [
-    shippingInfo.full_name,
-    shippingInfo.company,
     shippingInfo.street_1,
     shippingInfo.street_2,
     shippingInfo.city,
