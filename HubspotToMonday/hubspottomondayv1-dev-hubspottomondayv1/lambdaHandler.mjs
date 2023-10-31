@@ -103,7 +103,7 @@ export async function lambdaHandler(event) {
       state,
       closedate: { date: dateClosedDate, time: dateClosedTime },
       record_id3:
-        typeof record_id === string ? record_id : JSON.stringify(record_id),
+        typeof record_id === "string" ? record_id : JSON.stringify(record_id),
       link: dealLink,
     }),
   });
