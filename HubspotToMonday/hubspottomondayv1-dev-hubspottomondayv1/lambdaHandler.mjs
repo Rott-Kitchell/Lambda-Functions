@@ -76,6 +76,12 @@ export async function lambdaHandler(event) {
     ),
     dateClosedDate = dateClosed.substring(0, dateClosed.indexOf("T"));
 
+  let dealLink = `https://app.hubspot.com/contacts/7820027/record/0-3/${record_id}`;
+
+  console.log(
+    "🚀 ~ file: lambdaHandler.mjs:81 ~ lambdaHandler ~ dealLink:",
+    dealLink
+  );
   let resMessage = await sendToMonday(query, {
     boardId: parseInt(MONDAYNETNEWBOARDID),
     itemName: dealname,
@@ -96,8 +102,9 @@ export async function lambdaHandler(event) {
       sotd,
       state,
       closedate: { date: dateClosedDate, time: dateClosedTime },
-      record_id3: record_id,
-      link: `https://app.hubspot.com/contacts/7820027/record/0-3/${record_id}`,
+      record_id3:
+        typeof record_id === string ? record_id : JSON.stringify(record_id),
+      link: dealLink,
     }),
   });
 
