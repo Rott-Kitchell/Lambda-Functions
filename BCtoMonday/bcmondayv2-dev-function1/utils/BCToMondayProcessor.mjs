@@ -7,7 +7,7 @@ export default async function BCToMondayOrderProcessor(
     date_created,
     date_modified,
     status,
-    billing_address: { first_name: bFirst, last_name: bLast, company },
+    billing_address: { first_name: bFirst, last_name: bLast, company, email },
     shipping_addresses,
     products,
     staff_notes,
@@ -18,8 +18,12 @@ export default async function BCToMondayOrderProcessor(
   //What Monday needs from order:
   //Order Number
   const orderId = id;
-  // Billing Company/Customer Name
-  let contact = { full_name: bFirst + " " + bLast, company: company };
+  // Billing Company/Customer Name/Email Address
+  let contact = {
+    full_name: bFirst + " " + bLast,
+    company: company,
+    email: email,
+  };
   // date and time
   let dateCreated = new Date(date_created).toJSON(),
     dateCreatedTime = dateCreated.substring(

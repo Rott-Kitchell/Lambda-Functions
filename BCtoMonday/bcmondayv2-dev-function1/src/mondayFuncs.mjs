@@ -43,6 +43,7 @@ export async function FromBCToMonday(
       text6: staffNotes,
       text0: contact.full_name,
       text3: customerMessage,
+      email: contact.email,
       date0: {
         date: dateModified.dateModifiedDate,
         time: dateModified.dateModifiedTime,

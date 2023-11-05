@@ -76,7 +76,10 @@ export async function lambdaHandler(event) {
     ),
     dateClosedDate = dateClosed.substring(0, dateClosed.indexOf("T"));
 
-  let dealLink = `https://app.hubspot.com/contacts/7820027/record/0-3/${record_id}`;
+  let dealLink = {
+    url: `https://app.hubspot.com/contacts/7820027/record/0-3/${record_id}`,
+    text: `Hubspot Link`,
+  };
 
   console.log(
     "🚀 ~ file: lambdaHandler.mjs:81 ~ lambdaHandler ~ dealLink:",
