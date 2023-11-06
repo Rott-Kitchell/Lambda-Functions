@@ -1,6 +1,6 @@
 org: continuousaardwolf
-app: bcmondayv2
-service: bcmondayv2
+app: mondayautov1
+service: mondayautov1
 frameworkVersion: "3"
 configValidationMode: error
 
@@ -14,15 +14,15 @@ plugins:
 
 custom:
   serverless-layers:
-    - bcmondayv2-node-modules:
+    - mondayautov1-node-modules:
         dependenciesPath: ./package.json
-        layersDeploymentBucket: bcmondayv2-bucket
+        layersDeploymentBucket: mondayautov1-bucket
     - AWS-Parameters-and-Secrets-Lambda-Extension:
         arn: arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension:4
-        layersDeploymentBucket: bcmondayv2-bucket
+        layersDeploymentBucket: mondayautov1-bucket
 
 functions:
-  function1:
+  mondayautov1:
     handler: index.handler
     url:
       cors: true

@@ -1,0 +1,15 @@
+{
+  "name": "mondayautov1",
+  "version": "1.0.0",
+  "description": "custom GoTab automations for Monday.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "slsupdate": "sls deploy function -f mondayautov1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless-layers": "^2.7.0"
+  }
+}

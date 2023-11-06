@@ -2,6 +2,7 @@ org: continuousaardwolf
 app: hubspottomondayv1
 service: hubspottomondayv1
 frameworkVersion: "3"
+configValidationMode: error
 
 provider:
   name: aws
