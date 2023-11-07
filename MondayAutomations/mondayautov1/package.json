@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "serverless-layers": "^2.7.0"
+  },
+  "dependencies": {
+    "monday-sdk-js": "^0.4.11"
   }
 }

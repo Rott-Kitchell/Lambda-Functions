@@ -26,4 +26,4 @@ functions:
     handler: index.handler
     url:
       cors: true
-    timeout: 15
+    timeout: 30
