@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@hubspot/api-client": "^9.0.0"
+    "@hubspot/api-client": "^10.0.0"
   },
   "devDependencies": {
     "serverless-layers": "^2.6.1"
