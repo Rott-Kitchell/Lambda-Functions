@@ -73,30 +73,32 @@ export default async function BCToMondayOrderProcessor(
   const kits = await getKits();
   console.log("🚀 ~ file: BCToMondayProcessor.mjs:70 ~ kits:", kits);
   //Products
-  let mergedProducts = products.reduce((acc, prod) => {
-    // remove kits
-    if (kits.includes(prod.sku)) return acc;
-    let pId = prod.product_id;
-    let index = acc.findIndex((obj) => obj.product_id === pId);
-    if (index > -1) {
-      acc[index].quantity = acc[index].quantity + prod.quantity;
-    } else {
-      // remove the extra 'kit' substrings
-      if (prod.name[0] === "(") {
-        prod.name = prod.name.replace(/(\s)?(\(.*?\))(\s)?/g, "");
-      }
-      acc = [
-        ...acc,
-        {
-          product_id: prod.product_id,
-          name: prod.name,
-          quantity: prod.quantity,
-          sku: prod.sku,
-        },
-      ];
-    }
-    return acc;
-  }, []);
+  let mergedProducts = products
+    ? products.reduce((acc, prod) => {
+        // remove kits
+        if (kits.includes(prod.sku)) return acc;
+        let pId = prod.product_id;
+        let index = acc.findIndex((obj) => obj.product_id === pId);
+        if (index > -1) {
+          acc[index].quantity = acc[index].quantity + prod.quantity;
+        } else {
+          // remove the extra 'kit' substrings
+          if (prod.name[0] === "(") {
+            prod.name = prod.name.replace(/(\s)?(\(.*?\))(\s)?/g, "");
+          }
+          acc = [
+            ...acc,
+            {
+              product_id: prod.product_id,
+              name: prod.name,
+              quantity: prod.quantity,
+              sku: prod.sku,
+            },
+          ];
+        }
+        return acc;
+      }, [])
+    : [];
   //*Staff Notes
   //*Customer Comments
   return FromBCToMonday(
