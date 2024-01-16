@@ -4,6 +4,7 @@ import { MONDAYTOKEN } from "../config.mjs";
 const headers = {
   "Content-Type": "application/json",
   Authorization: MONDAYTOKEN,
+  "API-Version": "2023-10",
   Connection: "Close",
 };
 
