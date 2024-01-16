@@ -54,7 +54,7 @@ export async function FromBCToMonday(
   if (!doesItExist.data.items_page_by_column_values.items[0]) {
     console.log(orderId + " does not exist");
     let query =
-      "mutation ($boardId: Int!, $myItemName: String!, $columnVals: JSON!){ create_item (board_id:$boardId, item_name:$myItemName, column_values:$columnVals) { id } }";
+      "mutation ($boardId: ID!, $myItemName: String!, $columnVals: JSON!){ create_item (board_id:$boardId, item_name:$myItemName, column_values:$columnVals) { id } }";
 
     return sendToMonday(query, vars)
       .then(
@@ -66,7 +66,7 @@ export async function FromBCToMonday(
           await Promise.all(
             mergedProducts.map(async (prod) => {
               let prodQuery =
-                "mutation ($parentItemID: Int!, $myItemName: String!, $columnVals: JSON!){ create_subitem (parent_item_id:$parentItemID, item_name:$myItemName, column_values:$columnVals) { id board { id }}}";
+                "mutation ($parentItemID: ID!, $myItemName: String!, $columnVals: JSON!){ create_subitem (parent_item_id:$parentItemID, item_name:$myItemName, column_values:$columnVals) { id board { id }}}";
               let prodVars = {
                 parentItemID: parseInt(id),
                 myItemName: prod.name,
@@ -97,7 +97,7 @@ export async function FromBCToMonday(
     );
 
     let query =
-      "mutation ($boardId: Int!, $itemId: Int!, $columnVals: JSON!) { change_multiple_column_values (board_id: $boardId, item_id: $itemId, column_values: $columnVals) { id } }";
+      "mutation ($boardId: ID!, $itemId: ID!, $columnVals: JSON!) { change_multiple_column_values (board_id: $boardId, item_id: $itemId, column_values: $columnVals) { id } }";
     return sendToMonday(query, {
       boardId: mergedVars.boardId,
       itemId: mergedVars.itemId,
@@ -119,7 +119,7 @@ export async function FromBCToMonday(
               let prodVars;
               if (prod.parent_item_id) {
                 prodQuery =
-                  "mutation ($boardId: Int!, $itemId: Int!, $columnVals: JSON!) { change_multiple_column_values (board_id: $boardId, item_id: $itemId, column_values: $columnVals) { id } }";
+                  "mutation ($boardId: ID!, $itemId: ID!, $columnVals: JSON!) { change_multiple_column_values (board_id: $boardId, item_id: $itemId, column_values: $columnVals) { id } }";
                 prodVars = {
                   boardId: Number(prod.parent_item_id),
                   itemId: Number(prod.subitem_id),
@@ -133,7 +133,7 @@ export async function FromBCToMonday(
                 };
               } else {
                 prodQuery =
-                  "mutation ($parentItemID: Int!, $myItemName: String!, $columnVals: JSON!){ create_subitem (parent_item_id:$parentItemID, item_name:$myItemName, column_values:$columnVals) { id board { id }}}";
+                  "mutation ($parentItemID: ID!, $myItemName: String!, $columnVals: JSON!){ create_subitem (parent_item_id:$parentItemID, item_name:$myItemName, column_values:$columnVals) { id board { id }}}";
                 prodVars = {
                   parentItemID: parseInt(id),
                   myItemName: prod.name,
