@@ -4,7 +4,7 @@ import priortityCalculator from "./utils/priorityCalc.mjs";
 import { HUBSPOTTOKEN, MONDAYNETNEWBOARDID } from "./config.mjs";
 const hubspotClient = new Client({ accessToken: HUBSPOTTOKEN });
 let query =
-  "mutation ($boardId: Int!, $itemName: String!, $columnValues: JSON!){create_item (board_id: $boardId, item_name: $itemName, create_labels_if_missing: true, column_values: $columnValues) {id}}";
+  "mutation ($boardId: ID!, $itemName: String!, $columnValues: JSON!){create_item (board_id: $boardId, item_name: $itemName, create_labels_if_missing: true, column_values: $columnValues) {id}}";
 
 export async function lambdaHandler(event) {
   // TODO implement
