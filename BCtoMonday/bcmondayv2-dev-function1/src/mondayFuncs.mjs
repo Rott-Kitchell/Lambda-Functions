@@ -51,7 +51,7 @@ export async function FromBCToMonday(
     }),
   };
   let doesItExist = await doesItemExistInMonday(orderId);
-  if (!doesItExist.data.items_by_column_values[0]) {
+  if (!doesItExist.data.items_page_by_column_values.items[0]) {
     console.log(orderId + " does not exist");
     let query =
       "mutation ($boardId: Int!, $myItemName: String!, $columnVals: JSON!){ create_item (board_id:$boardId, item_name:$myItemName, column_values:$columnVals) { id } }";
@@ -93,7 +93,7 @@ export async function FromBCToMonday(
     let mergedVars = compareAndMerge(
       vars,
       mergedProducts,
-      doesItExist.data.items_by_column_values[0]
+      doesItExist.data.items_page_by_column_values.items[0]
     );
 
     let query =
