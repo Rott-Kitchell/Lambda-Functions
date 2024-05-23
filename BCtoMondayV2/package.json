@@ -1,0 +1,216 @@
+{
+	"name": "b_cto_monday_v2",
+	"version": "0.1.0",
+	"bin": {
+		"b_cto_monday_v2": "bin/b_cto_monday_v2.js"
+	},
+	"scripts": {
+		"build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+		"cdk": "cdk",
+		"test": "jest"
+	},
+	"devDependencies": {
+		"aws-cdk": "2.142.1",
+		"jest": "^29.7.0"
+	},
+	"dependencies": {
+		"aws-cdk-lib": "2.142.1",
+		"constructs": "^10.0.0",
+		"monday-sdk-js": "^0.5.5"
+	},
+	"Transform": "AWS::Serverless-2016-10-31",
+	"Resources": {
+		"Function": {
+			"Type": "AWS::Serverless::Function",
+			"Properties": {
+				"Description": {
+					"Fn::Sub": [
+						"Stack ${AWS::StackName} Function ${ResourceName}",
+						{
+							"ResourceName": "Function"
+						}
+					]
+				},
+				"CodeUri": "src/Function",
+				"Handler": "index.handler",
+				"Runtime": "nodejs20.x",
+				"MemorySize": 3008,
+				"Timeout": 30,
+				"Tracing": "Active",
+				"Environment": {
+					"Variables": {
+						"TABLE_TABLE_NAME": {
+							"Ref": "Table"
+						},
+						"TABLE_TABLE_ARN": {
+							"Fn::GetAtt": [
+								"Table",
+								"Arn"
+							]
+						}
+					}
+				},
+				"Policies": [
+					{
+						"DynamoDBCrudPolicy": {
+							"TableName": {
+								"Ref": "Table"
+							}
+						}
+					}
+				],
+				"Events": {
+					"ApiGET": {
+						"Type": "Api",
+						"Properties": {
+							"Path": "/",
+							"Method": "GET",
+							"RestApiId": {
+								"Ref": "Api"
+							}
+						}
+					}
+				}
+			}
+		},
+		"FunctionLogGroup": {
+			"Type": "AWS::Logs::LogGroup",
+			"DeletionPolicy": "Retain",
+			"Properties": {
+				"LogGroupName": {
+					"Fn::Sub": "/aws/lambda/${Function}"
+				}
+			}
+		},
+		"Table": {
+			"Type": "AWS::DynamoDB::Table",
+			"Properties": {
+				"AttributeDefinitions": [
+					{
+						"AttributeName": "id",
+						"AttributeType": "S"
+					}
+				],
+				"BillingMode": "PAY_PER_REQUEST",
+				"KeySchema": [
+					{
+						"AttributeName": "id",
+						"KeyType": "HASH"
+					}
+				],
+				"StreamSpecification": {
+					"StreamViewType": "NEW_AND_OLD_IMAGES"
+				}
+			}
+		},
+		"Function2": {
+			"Type": "AWS::Serverless::Function",
+			"Properties": {
+				"Description": {
+					"Fn::Sub": [
+						"Stack ${AWS::StackName} Function ${ResourceName}",
+						{
+							"ResourceName": "Function2"
+						}
+					]
+				},
+				"CodeUri": "src/Function2",
+				"Handler": "index.handler",
+				"Runtime": "nodejs20.x",
+				"MemorySize": 3008,
+				"Timeout": 30,
+				"Tracing": "Active",
+				"Environment": {
+					"Variables": {
+						"TABLE_TABLE_NAME": {
+							"Ref": "Table"
+						},
+						"TABLE_TABLE_ARN": {
+							"Fn::GetAtt": [
+								"Table",
+								"Arn"
+							]
+						}
+					}
+				},
+				"Policies": [
+					{
+						"DynamoDBCrudPolicy": {
+							"TableName": {
+								"Ref": "Table"
+							}
+						}
+					}
+				],
+				"Events": {
+					"ApiPOST": {
+						"Type": "Api",
+						"Properties": {
+							"Path": "/",
+							"Method": "POST",
+							"RestApiId": {
+								"Ref": "Api"
+							}
+						}
+					}
+				}
+			}
+		},
+		"Function2LogGroup": {
+			"Type": "AWS::Logs::LogGroup",
+			"DeletionPolicy": "Retain",
+			"Properties": {
+				"LogGroupName": {
+					"Fn::Sub": "/aws/lambda/${Function2}"
+				}
+			}
+		},
+		"Api": {
+			"Type": "AWS::Serverless::Api",
+			"Properties": {
+				"Name": {
+					"Fn::Sub": [
+						"${ResourceName} From Stack ${AWS::StackName}",
+						{
+							"ResourceName": "Api"
+						}
+					]
+				},
+				"StageName": "Prod",
+				"DefinitionBody": {
+					"openapi": "3.0",
+					"info": {},
+					"paths": {
+						"/": {
+							"get": {
+								"x-amazon-apigateway-integration": {
+									"httpMethod": "POST",
+									"type": "aws_proxy",
+									"uri": {
+										"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations"
+									}
+								},
+								"responses": {}
+							},
+							"post": {
+								"x-amazon-apigateway-integration": {
+									"httpMethod": "POST",
+									"type": "aws_proxy",
+									"uri": {
+										"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function2.Arn}/invocations"
+									}
+								},
+								"responses": {}
+							}
+						}
+					}
+				},
+				"EndpointConfiguration": "REGIONAL",
+				"TracingEnabled": true,
+				"Cors": {
+					"MaxAge": 5
+				}
+			}
+		}
+	}
+}
